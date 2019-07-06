@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var owner = this,
 	            pps = owner.properties;
 
-	        Util.setSelection(owner.element, owner.state.cursorPosition, pps.document);
+	        Util.setSelection(owner.element, owner.state.cursorPosition, pps.document, pps.prefix.length, pps.result);
 	    },
 
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
@@ -493,7 +493,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        owner.lastInputValue = newValue;
 
-	        endPos = Util.getNextCursorPosition(endPos, oldValue, newValue, pps.delimiter, pps.delimiters);
+	        if (!pps.postFix, !pps.numeral) {
+	            endPos = Util.getNextCursorPosition(endPos, oldValue, newValue, pps.delimiter, pps.delimiters);
+	        }
 
 	        if (owner.isAndroid) {
 	            window.setTimeout(function () {
@@ -2878,15 +2880,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return false;
 	    },
 
-	    setSelection: function setSelection(element, position, doc) {
+	    setSelection: function setSelection(element, position, doc, prefixLength, value) {
+	        prefixLength = prefixLength || 0;
+	        value = value || 0;
+
 	        if (element !== this.getActiveElement(doc)) {
 	            return;
 	        }
 
 	        // cursor is already in the end
-	        if (element && element.value.length <= position) {
-	            return;
-	        }
+	        // if (element && element.value.length <= position) {
+	        //     return;
+	        // }
 
 	        if (element.createTextRange) {
 	            var range = element.createTextRange();
@@ -2895,7 +2900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            range.select();
 	        } else {
 	            try {
-	                element.setSelectionRange(position, position);
+	                element.setSelectionRange(value.length - prefixLength, value.length - prefixLength);
 	            } catch (e) {
 	                // eslint-disable-next-line
 	                console.warn('The input element type does not support selection');

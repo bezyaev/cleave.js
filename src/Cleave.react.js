@@ -20,7 +20,7 @@ var cleaveReactClass = CreateReactClass({
         var owner = this,
             pps = owner.properties;
 
-        Util.setSelection(owner.element, owner.state.cursorPosition, pps.document);
+        Util.setSelection(owner.element, owner.state.cursorPosition, pps.document, pps.prefix.length, pps.result);
     },
 
     componentWillReceiveProps: function (nextProps) {
@@ -434,7 +434,9 @@ var cleaveReactClass = CreateReactClass({
 
         owner.lastInputValue = newValue;
 
-        endPos = Util.getNextCursorPosition(endPos, oldValue, newValue, pps.delimiter, pps.delimiters);
+        if (!pps.postFix, !pps.numeral) {
+            endPos = Util.getNextCursorPosition(endPos, oldValue, newValue, pps.delimiter, pps.delimiters);
+        }
 
         if (owner.isAndroid) {
             window.setTimeout(function () {
