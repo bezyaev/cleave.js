@@ -1477,15 +1477,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return false;
 	    },
 
-	    setSelection: function (element, position, doc) {
+	    setSelection: function (element, position, doc, prefixLength, value) {
+	        prefixLength = prefixLength || 0;
+	        value = value || 0;
+
 	        if (element !== this.getActiveElement(doc)) {
 	            return;
 	        }
 
 	        // cursor is already in the end
-	        if (element && element.value.length <= position) {
-	            return;
-	        }
+	        // if (element && element.value.length <= position) {
+	        //     return;
+	        // }
 
 	        if (element.createTextRange) {
 	            var range = element.createTextRange();
@@ -1494,7 +1497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            range.select();
 	        } else {
 	            try {
-	                element.setSelectionRange(position, position);
+	                element.setSelectionRange(value.length - prefixLength, value.length - prefixLength);
 	            } catch (e) {
 	                // eslint-disable-next-line
 	                console.warn('The input element type does not support selection');
